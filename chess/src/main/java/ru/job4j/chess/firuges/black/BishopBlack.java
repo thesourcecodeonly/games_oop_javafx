@@ -22,43 +22,29 @@ public class BishopBlack implements Figure {
     public Cell[] way(Cell dest) throws ImpossibleMoveException {
         if (!isDiagonal(position, dest)) {
             throw new ImpossibleMoveException(
-                    String.format("Could not move by diagonal from %s to %s", position, dest)
+                    String.format("Could not move by diagonal from %s to %s.", position, dest)
             );
         }
         int x = position.getX();
         int y = position.getY();
-        int deltaX = x - dest.getX();
-        int deltaY = y - dest.getY();
+        int deltaX = x - dest.getX() < 0 ? 1 : -1;
+        int deltaY = y - dest.getY() < 0 ? 1 : -1;
         int size = (Math.abs(deltaX));
         Cell[] steps = new Cell[size];
         for (int index = 0; index < size; index++) {
-            x += 1;
-            y -= 1;
+            x += deltaX;
+            y += deltaY;
             steps[index] = Cell.findBy(x, y);
         }
         return steps;
     }
 
     public boolean isDiagonal(Cell source, Cell dest) {
-        boolean rsl = false;
-        int deltaX = source.getX() - dest.getX();
-        int deltaY = source.getY() - dest.getY();
-        if (Math.abs(deltaX) == Math.abs(deltaY)) {
-            rsl = true;
-        }
-        return rsl;
+        return Math.abs(source.getX() - dest.getX()) == Math.abs(source.getY() - dest.getY());
     }
 
     @Override
     public Figure copy(Cell dest) {
         return new BishopBlack(dest);
-    }
-
-    public static void main(String[] args) {
-
-        BishopBlack bishopBlack = new BishopBlack(Cell.A1);
-
-        System.out.println(Arrays.toString(bishopBlack.way(Cell.G5)));
-
     }
 }
